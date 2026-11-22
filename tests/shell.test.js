@@ -28,5 +28,6 @@ test("MIDILLION keeps the Open Noillirk game interface and uses middle scoring c
   const runtime = html.match(/<script id="runtime-config" type="application\/json">(.*?)<\/script>/)?.[1];
   assert.ok(runtime, "runtime config should exist");
   assert.doesNotThrow(() => JSON.parse(runtime));
-  assert.doesNotMatch(html, /Open Noillirk|OpenKrillion|most common answer takes you highest/i);
+  assert.match(html, /Open-Noillirk and OpenKrillion code/);
+  assert.doesNotMatch(html, /Open Noillirk|most common answer takes you highest/i);
 });
