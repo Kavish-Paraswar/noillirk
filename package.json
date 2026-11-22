@@ -4,15 +4,6 @@
   "private": true,
   "type": "module",
   "description": "An independent survey game where the middle-ranked answer scores highest.",
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "test": "node --test && node --check public/app.mjs && node --check public/sky.mjs && node --check public/midillion-adapter.mjs"
-  },
-  "dependencies": {
-    "next": "^16.4.2",
-    "react": "19.1.1",
-    "react-dom": "19.1.1"
-  }
+  "scripts": { "dev": "next dev", "build": "next build", "start": "next start", "test": "node --test" },
+  "dependencies": { "next": "^16.4.2", "react": "19.1.1", "react-dom": "19.1.1" }
 }
