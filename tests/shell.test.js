@@ -24,5 +24,9 @@ test("MIDILLION keeps the Open Noillirk game interface and uses middle scoring c
   assert.match(html, /25 seconds each/);
   assert.match(html, /The fifth-ranked answer earns 100 points/);
   assert.match(html, /MIDILLION/);
+  assert.match(html, /https:\/\/github.com\/Kavish-Paraswar\/noillirk/);
+  const runtime = html.match(/<script id="runtime-config" type="application\/json">(.*?)<\/script>/)?.[1];
+  assert.ok(runtime, "runtime config should exist");
+  assert.doesNotThrow(() => JSON.parse(runtime));
   assert.doesNotMatch(html, /Open Noillirk|OpenKrillion|most common answer takes you highest/i);
 });
