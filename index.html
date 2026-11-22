@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101827">
+  <meta name="description" content="MIDILLION — the survey game where the middle of the crowd wins.">
+  <title>MIDILLION — The Game of the Middle</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="MIDILLION home">
+        <span class="brand-mark">M</span>
+        <span><strong>MIDILLION</strong><small>THE GAME OF THE MIDDLE</small></span>
+      </a>
+      <div class="top-actions">
+        <span class="daily-chip"><span class="live-dot"></span> CROWD DATA · DEMO</span>
+        <button class="icon-button" id="sound-toggle" type="button" aria-label="Toggle sound" title="Toggle sound">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4h4l5 4V6l-5 4H4Z"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11"/></svg>
+          <span id="sound-label">SOUND ON</span>
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <section class="screen active" id="home-screen">
+        <div class="hero-grid">
+          <div class="hero-copy">
+            <div class="eyebrow"><span class="eyebrow-line"></span> A GAME ABOUT READING THE ROOM</div>
+            <h1>Don't pick the<br><em>most</em> popular.<br><span>Pick the middle.</span></h1>
+            <p class="hero-text">Seven questions. A whole crowd of opinions. Your job is to find the answer that lands right in the middle.</p>
+            <div class="hero-meta">
+              <div><strong>07</strong><span>QUESTIONS</span></div>
+              <i></i>
+              <div><strong>25s</strong><span>PER ANSWER</span></div>
+              <i></i>
+              <div><strong>700</strong><span>MAX POINTS</span></div>
+            </div>
+          </div>
+          <div class="hero-art" aria-label="Illustration of a balanced crowd meter">
+            <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+            <div class="sun-disc"></div>
+            <div class="floating-note note-left">TOO RARE</div>
+            <div class="floating-note note-right">TOO OBVIOUS</div>
+            <div class="balance-scene">
+              <div class="beam"></div>
+              <div class="pivot"></div>
+              <div class="platform platform-left"><span>01</span><b>LOW</b></div>
+              <div class="platform platform-mid"><span>05</span><b>JUST RIGHT</b></div>
+              <div class="platform platform-right"><span>09</span><b>HIGH</b></div>
+              <div class="crowd crowd-a"><i></i><i></i><i></i><i></i></div>
+              <div class="crowd crowd-b"><i></i><i></i><i></i><i></i><i></i></div>
+              <div class="crowd crowd-c"><i></i><i></i><i></i></div>
+            </div>
+            <div class="art-caption"><span class="caption-dot"></span> THE SWEET SPOT ISN'T AT EITHER END</div>
+          </div>
+        </div>
+
+        <div class="section-heading"><div><span class="eyebrow">CHOOSE YOUR CLIMB</span><h2>Find your middle.</h2></div><span class="section-note">Same crowd. Different ways to play.</span></div>
+        <div class="mode-grid">
+          <button class="mode-card daily-card" data-mode="daily" type="button">
+            <span class="mode-number">01 / DAILY</span><span class="mode-icon sun-icon">✳</span>
+            <strong>Daily</strong><span class="mode-desc">One shared set of questions. Come back tomorrow.</span>
+            <span class="mode-cta">PLAY TODAY <b>↗</b></span>
+          </button>
+          <button class="mode-card classic-card" data-mode="classic" type="button">
+            <span class="mode-number">02 / PRACTICE</span><span class="mode-icon stack-icon">▤</span>
+            <strong>Classic</strong><span class="mode-desc">A fresh seven-question run. Improve your score.</span>
+            <span class="mode-cta">START A RUN <b>↗</b></span>
+          </button>
+          <button class="mode-card endless-card" data-mode="endless" type="button">
+            <span class="mode-number">03 / SURVIVAL</span><span class="mode-icon endless-icon">∞</span>
+            <strong>Endless</strong><span class="mode-desc">Three lives. Keep finding the middle to stay in.</span>
+            <span class="mode-cta">KEEP GOING <b>↗</b></span>
+          </button>
+          <button class="mode-card party-card" id="multiplayer-button" type="button">
+            <span class="mode-number">04 / WITH FRIENDS</span><span class="mode-icon party-icon">◎</span>
+            <strong>Multiplayer</strong><span class="mode-desc">Challenge your friends and compare your crowd instincts.</span>
+            <span class="mode-cta">ROOMS SOON <b>↗</b></span>
+          </button>
+        </div>
+
+        <div class="how-strip">
+          <div><span class="eyebrow">THE RULE IS SIMPLE</span><strong>Popularity has a sweet spot.</strong></div>
+          <div class="scale-labels"><span>RARE</span><span class="scale-track"><i></i></span><span>COMMON</span></div>
+          <p>The closer your answer is to the middle of the survey, the more points you earn. The most common answer isn't always the best one.</p>
+        </div>
+      </section>
+
+      <section class="screen" id="game-screen">
+        <div class="game-topline">
+          <button class="back-button" id="leave-game" type="button">← MENU</button>
+          <div class="run-label"><span id="mode-label">CLASSIC RUN</span><span class="run-separator">/</span><span id="round-label">QUESTION 1 OF 7</span></div>
+          <div class="score-pill"><span>YOUR SCORE</span><strong id="score-value">000</strong></div>
+        </div>
+        <div class="game-layout">
+          <div class="question-panel">
+            <div class="question-kicker"><span class="question-index" id="question-index">01</span><span id="category-label">EVERYDAY LIFE</span></div>
+            <h2 id="question-text">Name something people do while waiting for a bus</h2>
+            <p class="question-hint">Think like the crowd. The middle answer wins.</p>
+            <div class="answer-form">
+              <label for="answer-input">YOUR ANSWER</label>
+              <div class="answer-row"><input id="answer-input" maxlength="80" autocomplete="off" placeholder="Type one answer…"><button id="submit-answer" type="button">LOCK IT IN <span>↗</span></button></div>
+              <div class="answer-feedback" id="answer-feedback" aria-live="polite">One clear answer is all you need.</div>
+            </div>
+            <div class="game-footer"><span>NO SPEED BONUS · TAKE YOUR BEST GUESS</span><span id="balloon-status" class="balloon-status"></span></div>
+          </div>
+          <aside class="timer-panel">
+            <div class="timer-ring" id="timer-ring"><div><strong id="timer-value">25</strong><span>SECONDS</span></div></div>
+            <div class="timer-caption">THE CROWD IS<br><b>WAITING.</b></div>
+            <div class="timer-progress"><i id="timer-progress"></i></div>
+            <div class="timer-note">You can change your answer until the clock runs out.</div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="screen" id="reveal-screen">
+        <div class="reveal-topline"><span class="eyebrow">THE CROWD HAS SPOKEN</span><span id="reveal-round">QUESTION 01 / 07</span></div>
+        <div class="reveal-heading"><div><h2 id="reveal-title">You found the middle.</h2><p id="reveal-subtitle">Here's where the crowd landed.</p></div><div class="earned-points"><strong id="earned-score">100</strong><span>POINTS</span></div></div>
+        <div class="board-card">
+          <div class="board-header"><span>ANSWER</span><span>SHARE OF RESPONSES</span><span>MIDDLE SCORE</span></div>
+          <div id="answer-board" class="answer-board"></div>
+          <div class="board-footnote">Illustrative sample survey distribution · not real survey results</div>
+        </div>
+        <div class="reveal-actions"><span id="running-total">RUNNING TOTAL · 100 / 700</span><button id="continue-button" type="button">NEXT QUESTION <span>→</span></button></div>
+      </section>
+
+      <section class="screen" id="summary-screen">
+        <div class="summary-card">
+          <span class="eyebrow">RUN COMPLETE</span>
+          <div class="summary-mark">M</div>
+          <h2 id="summary-title">You read the room.</h2>
+          <p id="summary-copy">Your crowd instinct is taking shape.</p>
+          <div class="summary-score"><strong id="final-score">000</strong><span>/ 700 POINTS</span></div>
+          <div class="summary-stats"><div><strong id="middle-hits">0</strong><span>MIDDLE HITS</span></div><div><strong id="questions-played">7</strong><span>QUESTIONS</span></div><div><strong id="best-answer">—</strong><span>BEST ANSWER</span></div></div>
+          <button id="play-again" type="button">PLAY ANOTHER RUN <span>↗</span></button>
+          <button class="text-button" id="summary-menu" type="button">BACK TO MENU</button>
+        </div>
+      </section>
+
+      <section class="screen" id="notice-screen">
+        <div class="notice-card"><span class="eyebrow">MULTIPLAYER</span><h2>Bring your crowd.</h2><p>Live rooms are part of the build plan. The current isolated prototype supports solo runs; realtime rooms will be added after the network contract and room transport are verified.</p><button id="notice-close" type="button">GOT IT</button></div>
+      </section>
+    </main>
+    <footer class="footer"><span>© 2026 MIDILLION · INDEPENDENT GAME PROTOTYPE</span><span>BUILT TO FIND THE MIDDLE</span></footer>
+  </div>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
