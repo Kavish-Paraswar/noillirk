@@ -39,15 +39,16 @@ function makeGame(mode, deal) {
   const date = deal.day || new Date().toISOString().slice(0, 10);
   const partyMode = read('midillion:party-next', false);
   write('midillion:party-next', false);
-  return save({
+  const game = {
     runId: runId(), date, dayNumber: deal.number ?? 0, mode, prompts, tickets: deal.tickets || { [prompts[0].id]: deal.ticket },
     results: [], round: 0, roundStart: Date.now() + PREVIEW_MS, completed: false, pausedAt: null, resetsAt: Date.parse(`${date}T00:00:00Z`) + 86_400_000,
     oxygen: 3, misses: 0, players: partyMode ? read(PARTY_KEY)?.players || [] : [],
-  });
+  };
   if (mode !== 'daily') {
     const recent = read('midillion:recent', []);
     write('midillion:recent', [...recent, ...prompts.map(prompt => prompt.id)].slice(-100));
   }
+  return save(game);
 }
 function addResult(game, answerResult, rawAnswer) {
   const prompt = game.prompts[game.round];
