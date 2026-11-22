@@ -8,7 +8,7 @@ const ascentHeight = score => `${Math.max(3, 97 - Math.max(0, Math.min(100, scor
 export function diveChart(results, escape) {
   return `<div class="dive-chart" role="img" aria-label="Answer scores on an upward scale from zero to one thousand metres">${[0,25,50,75,100].map(n=>`<div class="chart-grid" style="top:${100-n}%"><span>+${n*10}m</span></div>`).join('')}<div class="dive-columns">${results.map((r,i)=>`<div class="dive-column" title="Round ${i+1}: ${escape(r.answer||'no answer')}, ${r.score} points" style="--drop:${ascentHeight(r.score)};--delay:${i*90}ms;--dot-color:${TIERS[r.tier]?.color||'#43556b'}"><div class="dive-stem"></div><div class="dive-dot">${tierImage(r.tier)}</div><span>${i+1}</span></div>`).join('')}</div></div>`;
 }
-// MIDILLION is local-first and does not collect a population distribution.
+// Noillirk is local-first and does not collect a population distribution.
 export function distributionChart(dist, score, population) {
   const bins = dist?.length ? dist : Array(71).fill(0), width = 560, top = 18, baseline = 140;
   const smoothed = bins.map((_, i) => bins.reduce((s, n, j) => s + n * Math.exp(-.5 * ((i-j)/2.2) ** 2), 0));
