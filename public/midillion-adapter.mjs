@@ -1,4 +1,5 @@
 const RUN_KEY = 'midillion:active-run';
+const DAILY_RUN_KEY = 'midillion:daily-run';
 const NOTES_KEY = 'midillion:local-feedback';
 const ROUND_MS = 25_000;
 const PREVIEW_MS = 3_000;
@@ -21,12 +22,15 @@ function runId() {
 }
 function save(game) {
   write(RUN_KEY, game);
+  if (game.mode === 'daily') write(DAILY_RUN_KEY, game);
   return clone(game);
 }
 function getRun(id) {
-  const game = read(RUN_KEY);
-  if (!game || (id && game.runId !== id)) throw new Error('This climb is no longer saved on this device. Start a new climb.');
-  return game;
+  const active = read(RUN_KEY);
+  if (active && (!id || active.runId === id)) return active;
+  const daily = read(DAILY_RUN_KEY);
+  if (daily && (!id || daily.runId === id)) return daily;
+  throw new Error('This climb is no longer saved on this device. Start a new climb.');
 }
 function makeGame(mode, deal) {
   const prompts = mode === 'endless' ? [deal.prompt].filter(Boolean) : deal.prompts || [];
@@ -78,9 +82,11 @@ export async function midillionApi(path, data) {
     const today = new Date().toISOString().slice(0, 10);
     if (mode === 'daily') {
       const history = read('midillion:history', {});
-      if (history[today]) throw new Error("Today's Daily climb is already complete.");
+      const daily = read(DAILY_RUN_KEY);
       const active = read(RUN_KEY);
-      if (active?.mode === 'daily' && active.date === today && !active.completed) return clone(active);
+      if (daily?.mode === 'daily' && daily.date === today) return clone(daily);
+      if (active?.mode === 'daily' && active.date === today) return clone(active);
+      if (history[today]) throw new Error("Today's Daily climb is already complete on this browser.");
     }
     const recent = read('midillion:recent', []);
     const deal = await post('/api/deal', { mode, recent });
