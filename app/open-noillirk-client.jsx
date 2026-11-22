@@ -7,7 +7,7 @@ export default function MidillionClient({ markup }) {
     const script = document.createElement("script");
     script.type = "module";
     script.src = "/app.mjs";
-    script.dataset.midillion = "game-client";
+    script.dataset.openNoillirk = "game-client";
     document.body.append(script);
     return () => script.remove();
   }, []);

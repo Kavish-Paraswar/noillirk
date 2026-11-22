@@ -217,18 +217,18 @@ body[data-phase="done"] .mascot{z-index:15}
 .low-power .mascot:not(.poked):not(.celebrate) img{animation-play-state:paused}
 @media(prefers-reduced-motion:reduce){.mascot img{animation:none!important}}
 
-/* MIDILLION: clear mode selection, upward scoring, and same-screen party cues. */
+/* Open Noillirk: clear mode selection, upward scoring, and same-screen party cues. */
 .hero-word,.tagline,.subline,.open-label,.landing .eyebrow,.landing h2,.landing #land-points,.landing #land-quip{ text-shadow:none!important; }
 .hero-word{color:#000!important;}
 .tagline{color:#000;}
 .subline{color:#000;}
 .open-label{color:#000;}
-.midillion-mode-picker{border:0;padding:0;margin:10px 0 0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;background:none;}
-.midillion-mode-picker legend{width:100%;padding:0 0 4px;text-align:center;color:var(--muted);font-size:13px;letter-spacing:.2em;}
-.midillion-mode-picker .mode-button{min-width:112px;padding:10px 14px;border:1px solid #35506c;background:#0a1728;color:#d9e9f8;letter-spacing:.08em;font-size:14px;transition:background .15s,border-color .15s,color .15s,transform .15s;}
-.midillion-mode-picker .mode-button:hover{border-color:var(--cyan);color:var(--cyan);}
-.midillion-mode-picker .mode-button.active{border:2px solid var(--cyan);background:#12334a;color:#72edff;box-shadow:inset 0 0 0 1px #4de3ff24;}
-.midillion-mode-picker .mode-button:focus-visible{outline:3px solid #ffd166;outline-offset:3px;}
+.noillirk-mode-picker{border:0;padding:0;margin:10px 0 0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;background:none;}
+.noillirk-mode-picker legend{width:100%;padding:0 0 4px;text-align:center;color:var(--muted);font-size:13px;letter-spacing:.2em;}
+.noillirk-mode-picker .mode-button{min-width:112px;padding:10px 14px;border:1px solid #35506c;background:#0a1728;color:#d9e9f8;letter-spacing:.08em;font-size:14px;transition:background .15s,border-color .15s,color .15s,transform .15s;}
+.noillirk-mode-picker .mode-button:hover{border-color:var(--cyan);color:var(--cyan);}
+.noillirk-mode-picker .mode-button.active{border:2px solid var(--cyan);background:#12334a;color:#72edff;box-shadow:inset 0 0 0 1px #4de3ff24;}
+.noillirk-mode-picker .mode-button:focus-visible{outline:3px solid #ffd166;outline-offset:3px;}
 .mode-description{margin:-3px 0 2px;text-align:center;color:#d1e1f0;font-size:17px;line-height:1.25;}
 .intro-help{margin:0;color:#d1e1f0;text-align:center;font-size:18px;line-height:1.3;}
 #multiplayer-btn{background:#0b14244d;border:1px solid #203755;padding:7px 11px;color:var(--muted);font-size:12px;letter-spacing:.12em;}
@@ -253,52 +253,12 @@ body[data-tier="skyhigh"][data-phase="plunge"] .falling-answer{animation:gold-ch
 .dive-chart{overflow:visible;margin-left:45px;}
 .dive-stem{height:var(--drop);}
 @media(max-width:699px){
-  .midillion-mode-picker{gap:5px;margin-top:7px;}
-  .midillion-mode-picker legend{font-size:11px;}
-  .midillion-mode-picker .mode-button{min-width:0;flex:1;padding:9px 8px;font-size:11px;}
+  .noillirk-mode-picker{gap:5px;margin-top:7px;}
+  .noillirk-mode-picker legend{font-size:11px;}
+  .noillirk-mode-picker .mode-button{min-width:0;flex:1;padding:9px 8px;font-size:11px;}
   .mode-description{font-size:14px;}
   .intro-help{font-size:14px;}
   #multiplayer-btn{max-width:102px;min-height:48px;white-space:normal;line-height:1.35;padding:5px;}
   .endless-oxygen{top:78px;font-size:21px;padding:5px 9px;}
   .dive-chart{margin-left:42px;}
-}
-
-
-/* MIDILLION: forest-to-sky stage and feather shop controls. */
-.feather-balance{position:absolute;z-index:20;left:max(16px,calc(50% - 410px));top:53px;padding:5px 10px;background:#081322e8;border:1px solid #8b7547;color:var(--gold);font-size:15px;letter-spacing:.08em;box-shadow:0 0 0 2px #060d1a;}
-body:not([data-phase="intro"]):not([data-phase="done"]) .feather-balance{display:none;}
-.daily-stats{margin:1px 0 0;text-align:center;color:#d1e1f0;font-size:15px;letter-spacing:.1em;}
-.home-reset-countdown{margin:0;text-align:center;color:var(--muted);font-size:13px;letter-spacing:.14em;}
-#view-results-btn{border-color:#8b7547;color:var(--gold);}
-#view-results-btn:hover{border-color:var(--gold);color:#fff0b2;}
-.shop-balance{color:var(--gold);font-size:21px;letter-spacing:.1em;margin:-10px 0 18px;}
-.shop-message{min-height:1.4em;margin-top:16px;}
-.buddy-list button.locked{border-color:#53627a;background:#0a1626;}
-.buddy-list button.locked small{color:var(--gold);}
-.buddy-list button.owned small{color:#86d6a5;}
-.buddy-list button:focus-visible{outline:2px solid var(--cyan);outline-offset:3px;}
-.feather-reward{margin:0 0 20px;color:var(--gold);font-size:20px;letter-spacing:.12em;}
-.endless-oxygen{align-items:center;gap:12px;}
-.life-balloon{position:relative;display:block;width:18px;height:25px;border-radius:50% 50% 46% 46%;background:#ff6b98;border:2px solid #a53e61;box-shadow:inset 3px 2px #ffffff66;}
-.life-balloon:nth-child(2){background:#ffd166;border-color:#a98237;}
-.life-balloon:nth-child(3){background:#58d8e8;border-color:#247e8b;}
-.life-balloon:before{content:"";position:absolute;left:5px;bottom:-4px;width:5px;height:4px;background:inherit;clip-path:polygon(0 0,100% 0,50% 100%);}
-.life-balloon:after{content:"";position:absolute;left:7px;top:23px;width:1px;height:10px;background:#d9e7f5;}
-@media(max-width:699px){
-  .feather-balance{left:9px;top:48px;padding:4px 7px;font-size:12px;}
-  .daily-stats{font-size:12px;}
-  .home-reset-countdown{font-size:11px;}
-  .feather-reward{font-size:16px;}
-}
-
-/* Match the compact top navigation used by the reference game. */
-.utility{top:14px;right:max(16px,calc(50% - 410px));flex-direction:row;gap:8px;}
-.menu-btn{top:14px;}
-.sitebar-label{position:absolute;z-index:20;top:18px;left:max(64px,calc(50% - 362px));color:var(--muted);font-size:15px;letter-spacing:.18em;}
-.feather-balance{top:52px;}
-@media(max-width:699px){
-  .utility{top:10px;right:9px;gap:5px;}
-  .menu-btn{top:10px;left:9px;}
-  .sitebar-label{top:17px;left:52px;font-size:12px;letter-spacing:.12em;}
-  .feather-balance{top:46px;left:9px;}
 }

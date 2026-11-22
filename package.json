@@ -8,7 +8,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test": "node --test && node --check public/app.mjs && node --check public/sky.mjs && node --check public/midillion-adapter.mjs"
+    "test": "node --test && node --check public/app.mjs && node --check public/ocean.mjs && node --check public/seascape.mjs && node --check public/noillirk-adapter.mjs && node --check lib/openkrillion-shell.js"
   },
   "dependencies": {
     "next": "^16.4.2",

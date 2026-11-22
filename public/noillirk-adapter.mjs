@@ -1,5 +1,6 @@
 const RUN_KEY = 'midillion:active-run';
 const DAILY_RUN_KEY = 'midillion:daily-run';
+const PARTY_KEY = 'midillion:party';
 const NOTES_KEY = 'midillion:local-feedback';
 const ROUND_MS = 25_000;
 const PREVIEW_MS = 3_000;
@@ -36,26 +37,26 @@ function makeGame(mode, deal) {
   const prompts = mode === 'endless' ? [deal.prompt].filter(Boolean) : deal.prompts || [];
   if (!prompts.length) throw new Error('No prompts were returned. Please try again.');
   const date = deal.day || new Date().toISOString().slice(0, 10);
-  const game = {
-    runId: runId(), date, dayNumber: deal.number ?? 0, mode, prompts,
-    tickets: deal.tickets || { [prompts[0].id]: deal.ticket },
-    results: [], round: 0, roundStart: Date.now() + PREVIEW_MS, completed: false,
-    pausedAt: null, resetsAt: Date.parse(`${date}T00:00:00Z`) + 86_400_000,
-    oxygen: 3, misses: 0,
-  };
+  const partyMode = read('midillion:party-next', false);
+  write('midillion:party-next', false);
+  return save({
+    runId: runId(), date, dayNumber: deal.number ?? 0, mode, prompts, tickets: deal.tickets || { [prompts[0].id]: deal.ticket },
+    results: [], round: 0, roundStart: Date.now() + PREVIEW_MS, completed: false, pausedAt: null, resetsAt: Date.parse(`${date}T00:00:00Z`) + 86_400_000,
+    oxygen: 3, misses: 0, players: partyMode ? read(PARTY_KEY)?.players || [] : [],
+  });
   if (mode !== 'daily') {
     const recent = read('midillion:recent', []);
     write('midillion:recent', [...recent, ...prompts.map(prompt => prompt.id)].slice(-100));
   }
-  return save(game);
 }
 function addResult(game, answerResult, rawAnswer) {
   const prompt = game.prompts[game.round];
   const tier = answerResult?.accepted ? answerResult.tier : 'miss';
   const score = answerResult?.accepted ? Number(answerResult.points) || 0 : 0;
   const result = {
-    round: game.round, score, tier, answer: answerResult?.accepted ? answerResult.answer : '',
-    rawAnswer: rawAnswer || '', quip: answerResult?.reason || '', promptId: prompt.id,
+    round: game.round, score, tier, answer: answerResult?.accepted ? answerResult.answer : '', rawAnswer: rawAnswer || '',
+    quip: answerResult?.reason || '', promptId: prompt.id,
+    player: game.players.length ? game.players[game.results.length % game.players.length] : null,
   };
   game.results.push(result);
   game.roundStart = null;
@@ -71,7 +72,7 @@ function addResult(game, answerResult, rawAnswer) {
 
 export async function midillionApi(path, data) {
   if (path === 'today') {
-    const deal = await post('/api/deal', { mode: 'daily' });
+    const deal = await post('/api/noillirk/deal', { mode: 'daily' });
     return { date: deal.day, dayNumber: deal.number, sample: false };
   }
 
@@ -86,10 +87,10 @@ export async function midillionApi(path, data) {
       const active = read(RUN_KEY);
       if (daily?.mode === 'daily' && daily.date === today) return clone(daily);
       if (active?.mode === 'daily' && active.date === today) return clone(active);
-      if (history[today]) throw new Error("Today's Daily climb is already complete on this browser.");
+      if (history[today]) throw new Error("Today's Daily dive is already complete on this browser.");
     }
     const recent = read('midillion:recent', []);
-    const deal = await post('/api/deal', { mode, recent });
+    const deal = await post('/api/noillirk/deal', { mode, recent });
     return makeGame(mode, deal);
   }
 
@@ -117,7 +118,7 @@ export async function midillionApi(path, data) {
       const result = addResult(game, null, '');
       return { result, state: save(game) };
     }
-    const answerResult = await post('/api/answer', {
+    const answerResult = await post('/api/noillirk/answer', {
       promptId: prompt.id, ticket: game.tickets[prompt.id], answer: raw,
       previewCorrection: Boolean(data.previewCorrection), confirm: Boolean(data.confirm),
     });
@@ -133,7 +134,7 @@ export async function midillionApi(path, data) {
     const nextRound = game.round + 1;
     if (game.mode === 'endless' && nextRound >= game.prompts.length) {
       const recent = game.results.map(result => result.promptId);
-      const deal = await post('/api/deal', { mode: 'endless', recent });
+      const deal = await post('/api/noillirk/deal', { mode: 'endless', recent });
       if (!deal.prompt) throw new Error('No next prompt was returned.');
       game.prompts.push(deal.prompt);
       game.tickets[deal.prompt.id] = deal.ticket;
@@ -153,7 +154,7 @@ export async function midillionApi(path, data) {
     const prompts = await Promise.all(game.prompts.slice(0, game.results.length).map(async prompt => {
       try {
         const query = new URLSearchParams({ promptId: prompt.id, ticket: game.tickets[prompt.id] || '' });
-        const response = await fetch(`/api/answers?${query}`, { credentials: 'same-origin', cache: 'no-store' });
+        const response = await fetch(`/api/noillirk/answers?${query}`, { credentials: 'same-origin', cache: 'no-store' });
         const board = await response.json();
         return { answers: (board.answers || []).map(answer => ({ ...answer, score: answer.points, quip: '' })) };
       } catch { return { answers: [] }; }

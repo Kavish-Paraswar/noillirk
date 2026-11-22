@@ -1,15 +1,6 @@
 export const metadata = {
-  title: "MIDILLION — The Game of the Middle",
-  description: "Seven prompts. Twenty-five seconds. Find the answer closest to the middle of the crowd.",
-  openGraph: {
-    title: "MIDILLION — The Game of the Middle",
-    description: "Find the middle. Climb higher.",
-    images: [{ url: "/assets/og.svg", width: 1200, height: 630, alt: "MIDILLION — Find the middle. Climb higher." }]
-  },
-  twitter: {
-    card: "summary_large_image",
-    images: ["/assets/og.svg"]
-  }
+  title: "MIDILLION — The Middle Answer Dive",
+  description: "Seven prompts. Twenty-five seconds each. Find the middle-ranked answer and score higher.",
 };
 
 export default function RootLayout({ children }) {
