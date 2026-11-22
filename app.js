@@ -213,7 +213,8 @@ async function finishRound(result, timedOut) {
   }
   $("#score-value").textContent = String(state.score).padStart(3, "0");
   $("#earned-score").textContent = String(points).padStart(3, "0");
-  $("#reveal-round").textContent = `QUESTION ${String(state.round + 1).padStart(2, "0")} / ${state.mode === "endless" ? "∞" : String(state.prompts.length).padStart(2, "0")}`;
+  const revealNumber = state.mode === "endless" ? state.roundsPlayed : state.round + 1;
+  $("#reveal-round").textContent = `QUESTION ${String(revealNumber).padStart(2, "0")} / ${state.mode === "endless" ? "∞" : String(state.prompts.length).padStart(2, "0")}`;
   $("#reveal-title").textContent = points === 100 ? "Right in the middle." : points > 0 ? "The crowd has a place for that." : "You missed the mark.";
   $("#reveal-subtitle").textContent = result?.answer ? `You answered “${result.answer}”. Here's where it landed.` : timedOut ? "Time ran out. Here's where the crowd landed." : "Here's the sample distribution for this prompt.";
   $("#running-total").textContent = `RUNNING TOTAL · ${state.score} / ${state.mode === "endless" ? "∞" : "700"}`;
