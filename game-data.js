@@ -1,5 +1,8 @@
 export const ROUND_SECONDS = 25;
 export const STANDARD_ROUNDS = 7;
+export const CLASSIC_ROUNDS = STANDARD_ROUNDS;
+export const MAX_ANSWER_LENGTH = 80;
+export const RETRY_REASON = "That does not fit this prompt. Try a more specific answer.";
 export const MAX_SCORE = 700;
 export const START_BALLOONS = 3;
 
@@ -200,24 +203,94 @@ export function scoreForRank(rank, total = 9) {
   return Math.max(0, Math.round(100 - (Math.abs(rank - middle) / maxDistance) * 80));
 }
 
+export function tierForRank(rank, total = 9) {
+  if (!Number.isInteger(rank) || rank < 1 || rank > total) return "miss";
+  const distance = Math.abs(rank - (total + 1) / 2);
+  if (distance === 0) return "skyhigh";
+  if (distance <= 1) return "cloud";
+  if (distance <= 2) return "kite";
+  if (distance <= 3) return "treetop";
+  return "grounded";
+}
+
 export function findAnswer(prompt, rawAnswer) {
   const answer = normalizeAnswer(rawAnswer);
-  if (!answer || answer.length > 80) return null;
+  if (!answer || answer.length > MAX_ANSWER_LENGTH) return null;
   for (let index = 0; index < prompt.board.length; index += 1) {
     const item = prompt.board[index];
     const choices = [item.answer, ...(item.aliases ?? [])];
     if (choices.some(choice => normalizeAnswer(choice) === answer)) {
-      return { ...item, rank: index + 1, score: scoreForRank(index + 1, prompt.board.length) };
+      const rank = index + 1;
+      return { ...item, rank, score: scoreForRank(rank, prompt.board.length), tier: tierForRank(rank, prompt.board.length) };
     }
   }
   return null;
 }
 
 export function publicBoard(prompt) {
-  return prompt.board.map((item, index) => ({
-    answer: item.answer,
-    share: item.share,
-    rank: index + 1,
-    score: scoreForRank(index + 1, prompt.board.length)
-  }));
+  return prompt.board.map((item, index) => {
+    const rank = index + 1;
+    const points = scoreForRank(rank, prompt.board.length);
+    return { answer: item.answer, share: item.share, rank, points, score: points, tier: tierForRank(rank, prompt.board.length) };
+  });
+}
+
+
+export function findPrompt(id) {
+  const prompt = PROMPTS.find(item => item.id === id);
+  if (!prompt) return null;
+  return {
+    ...prompt,
+    cat: prompt.category.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")
+  };
+}
+
+export function scoreAnswer(prompt, rawAnswer, options = {}) {
+  const answer = String(rawAnswer ?? "").trim();
+  if (!answer || answer.length > MAX_ANSWER_LENGTH) {
+    return { accepted: false, answer, tier: "miss", points: 0, reason: "Please enter one specific answer.", retryable: true };
+  }
+  const match = findAnswer(prompt, answer);
+  if (match) {
+    return { accepted: true, answer: match.answer, rank: match.rank, tier: match.tier, points: match.score,
+      reason: match.tier === "skyhigh" ? "Exactly in the middle. Perfect score." : "Your answer has a place in the distribution." };
+  }
+  if (options.allowUnknown) {
+    return { accepted: true, answer, rank: null, tier: "grounded", points: 20,
+      reason: "A relevant answer outside the sample board receives the lowest score." };
+  }
+  return { accepted: false, answer, tier: "miss", points: 0, reason: RETRY_REASON, retryable: true };
+}
+
+function editDistance(a, b, limit = Infinity) {
+  if (Math.abs(a.length - b.length) > limit) return limit + 1;
+  let row = Array.from({ length: b.length + 1 }, (_, i) => i);
+  for (let i = 1; i <= a.length; i += 1) {
+    const next = [i];
+    for (let j = 1; j <= b.length; j += 1) next[j] = Math.min(next[j - 1] + 1, row[j] + 1, row[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+    if (Math.min(...next) > limit) return limit + 1;
+    row = next;
+  }
+  return row[b.length];
+}
+
+export function findCorrection(prompt, rawAnswer) {
+  const key = normalizeAnswer(rawAnswer);
+  if (key.length < 4 || key.length > MAX_ANSWER_LENGTH) return null;
+  const entries = prompt.board.flatMap(item => [item.answer, ...(item.aliases ?? [])].map(word => ({ answer: item.answer, key: normalizeAnswer(word) })));
+  const allowance = key.length < 7 ? 1 : 2;
+  const bestByAnswer = new Map();
+  for (const entry of entries) {
+    const distance = editDistance(key, entry.key, allowance);
+    if (distance <= allowance && (!bestByAnswer.has(entry.answer) || distance < bestByAnswer.get(entry.answer).distance)) {
+      bestByAnswer.set(entry.answer, { answer: entry.answer, distance });
+    }
+  }
+  const candidates = [...bestByAnswer.values()].sort((a, b) => a.distance - b.distance);
+  if (!candidates.length || (candidates[1] && candidates[0].distance === candidates[1].distance)) return null;
+  return candidates[0].answer;
+}
+
+export function boardForPrompt(prompt) {
+  return publicBoard(prompt);
 }

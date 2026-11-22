@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+<rect width="1200" height="630" fill="#050a14"/>
+<path d="M0 470 Q220 420 420 470 T840 470 T1200 455 V630 H0Z" fill="#0b2138"/>
+<circle cx="960" cy="145" r="78" fill="#ffd166"/>
+<g fill="#e8f1ff" opacity=".85"><path d="M170 180h250v28H170zM215 152h180v28H215zM260 124h90v28h-90z"/><path d="M740 300h210v24H740zM780 276h160v24H780zM825 252h85v24h-85z"/></g>
+<g fill="#ff5d8f"><ellipse cx="600" cy="360" rx="32" ry="44"/><path d="M600 404l-12 30 12-8 12 8z"/></g>
+<path d="M600 314V255" stroke="#e8f1ff" stroke-width="4" stroke-dasharray="6 8"/><circle cx="600" cy="230" r="30" fill="none" stroke="#ff5d8f" stroke-width="4"/>
+<text x="600" y="105" text-anchor="middle" fill="#e8f1ff" font-family="monospace" font-size="72" font-weight="bold" letter-spacing="10">MIDILLION</text>
+<text x="600" y="545" text-anchor="middle" fill="#4de3ff" font-family="monospace" font-size="34" letter-spacing="4">FIND THE MIDDLE. CLIMB HIGHER.</text>
+</svg>
