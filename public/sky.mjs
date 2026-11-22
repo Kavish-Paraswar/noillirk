@@ -495,12 +495,16 @@ export class Sky {
     }
     c.globalAlpha = 1;
 
-    const groundFade = clamp((currentGround - h * .52) / 180, 0, 1);
-    const fadeStart = this.phase === 'intro' ? Math.max(0, currentGround - 360) : h - 90;
-    const fade = c.createLinearGradient(0, fadeStart, 0, Math.min(h, fadeStart + 120));
+    const fadeStart = this.phase === 'intro' ? Math.max(0, currentGround - 130) : h - 90;
+    const fade = c.createLinearGradient(0, fadeStart, 0, h);
     fade.addColorStop(0, 'rgba(5, 10, 20, 0)');
-    fade.addColorStop(.65, 'rgba(5, 10, 20, ' + (this.phase === 'intro' ? .12 + groundFade * .2 : .78) + ')');
-    fade.addColorStop(1, 'rgba(5, 10, 20, .96)');
+    if (this.phase === 'intro') {
+      fade.addColorStop(.7, 'rgba(5, 10, 20, .06)');
+      fade.addColorStop(1, 'rgba(5, 10, 20, .18)');
+    } else {
+      fade.addColorStop(.65, 'rgba(5, 10, 20, .78)');
+      fade.addColorStop(1, 'rgba(5, 10, 20, .96)');
+    }
     c.fillStyle = fade;
     c.fillRect(0, fadeStart, w, h - fadeStart);
 
